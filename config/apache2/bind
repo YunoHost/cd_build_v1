@@ -1,0 +1,32 @@
+<VirtualHost *:80>
+	
+	ServerName bind.yunohost.org
+	RewriteEngine On
+        RewriteCond %{HTTPS} off
+        RewriteRule (.*) https://bind.yunohost.org%{REQUEST_URI}
+
+</VirtualHost>
+
+<VirtualHost *:443>
+	
+	ServerName bind.yunohost.org
+	SSLEngine On
+        SSLCertificateFile /etc/ssl/certs/yunohost_crt.pem
+        SSLCertificateKeyFile /etc/ssl/private/yunohost_key.pem
+	SSLCACertificateFile /etc/ssl/certs/ca-yunohost_crt.pem
+
+	ServerAdmin webmaster@yunohost.org
+
+	ProxyPass  /  http://127.0.0.1:5280/http-bind/
+        ProxyPassReverse  /   http://127.0.0.1:5280/http-bind/
+        Header set Access-Control-Allow-Origin "*"
+
+	ErrorLog ${APACHE_LOG_DIR}/bind-error.log
+
+	# Possible values include: debug, info, notice, warn, error, crit,
+	# alert, emerg.
+	LogLevel error
+	
+	CustomLog ${APACHE_LOG_DIR}/bind-access.log combined
+
+</VirtualHost>

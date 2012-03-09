@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<jappix xmlns="jappix:conf:main">
+	<name>Jappix</name>
+	<desc>a free social network</desc>
+	<resource>Jappix</resource>
+	<lock>on</lock>
+	<anonymous>off</anonymous>
+	<registration>off</registration>
+	<bosh_proxy>on</bosh_proxy>
+	<manager_link>on</manager_link>
+	<groupchats_join></groupchats_join>
+	<encryption>on</encryption>
+	<https_storage>on</https_storage>
+	<https_force>on</https_force>
+	<compression>on</compression>
+	<multi_files>off</multi_files>
+	<developer>off</developer>
+</jappix>

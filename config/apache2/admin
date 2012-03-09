@@ -1,0 +1,51 @@
+#PerlRequire /var/lib/lemonldap-ng/handler/MyHandler.pm
+
+<VirtualHost *:80>
+	
+	ServerName admin.yunohost.org
+	RewriteEngine On
+        RewriteCond %{HTTPS} off
+        RewriteRule (.*) https://admin.yunohost.org%{REQUEST_URI}
+
+</VirtualHost>
+
+<VirtualHost *:443>
+	
+	ServerName admin.yunohost.org
+	SSLEngine On
+        SSLCertificateFile /etc/ssl/certs/yunohost_crt.pem
+        SSLCertificateKeyFile /etc/ssl/private/yunohost_key.pem
+	SSLCACertificateFile /etc/ssl/certs/ca-yunohost_crt.pem
+
+	ServerAdmin webmaster@yunohost.org
+
+        #PerlOptions     +GlobalRequest
+        #PerlHeaderParserHandler My::Package
+
+	DocumentRoot /var/www/yunohost/admin
+
+	<Directory />
+                Options FollowSymLinks
+                AllowOverride None
+        </Directory>
+
+        <Directory /var/www/yunohost/admin/>
+	        			Options Indexes FollowSymLinks -MultiViews
+                RewriteEngine On
+                RewriteCond %{SCRIPT_FILENAME} !-f
+							  RewriteCond %{SCRIPT_FILENAME} !-d
+							  RewriteRule ^(.*)$   index.php?uri=/$1    [NC,L,QSA]
+                AllowOverride None
+                Order allow,deny
+                allow from all
+	</Directory>
+
+	ErrorLog ${APACHE_LOG_DIR}/admin-error.log
+
+	# Possible values include: debug, info, notice, warn, error, crit,
+	# alert, emerg.
+	LogLevel error
+	
+	CustomLog ${APACHE_LOG_DIR}/admin-access.log combined
+
+</VirtualHost>

@@ -1,0 +1,47 @@
+PerlRequire /var/lib/lemonldap-ng/handler/MyHandler.pm
+
+<VirtualHost *:80>
+	
+	ServerName webmail.yunohost.org
+	RewriteEngine On
+        RewriteCond %{HTTPS} off
+        RewriteRule (.*) https://webmail.yunohost.org%{REQUEST_URI}
+
+</VirtualHost>
+
+<VirtualHost *:443>
+	
+	ServerName webmail.yunohost.org
+	SSLEngine On
+        SSLCertificateFile /etc/ssl/certs/yunohost_crt.pem
+        SSLCertificateKeyFile /etc/ssl/private/yunohost_key.pem
+	SSLCACertificateFile /etc/ssl/certs/ca-yunohost_crt.pem
+
+	ServerAdmin webmaster@yunohost.org
+
+        PerlOptions     +GlobalRequest
+        PerlHeaderParserHandler My::Package
+
+	DocumentRoot /var/www/yunohost/webmail
+
+	<Directory />
+                Options FollowSymLinks
+                AllowOverride None
+        </Directory>
+
+        <Directory /var/www/yunohost/webmail/>
+                Options Indexes +FollowSymLinks MultiViews
+                AllowOverride all
+                Order allow,deny
+                allow from all
+        </Directory>
+
+	ErrorLog ${APACHE_LOG_DIR}/webmail-error.log
+
+	# Possible values include: debug, info, notice, warn, error, crit,
+	# alert, emerg.
+	LogLevel error
+	
+	CustomLog ${APACHE_LOG_DIR}/webmail-access.log combined
+
+</VirtualHost>

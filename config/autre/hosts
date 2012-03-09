@@ -1,0 +1,16 @@
+127.0.0.1       localhost
+127.0.1.1       mail.yunohost.org        mail
+127.0.0.1	reload.yunohost.org
+127.0.0.1      	sync.yunohost.org
+127.0.0.1      	bind.yunohost.org
+127.0.0.1      	im.yunohost.org
+127.0.0.1      	yunohost.org
+
+
+# The following lines are desirable for IPv6 capable hosts
+::1     ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+

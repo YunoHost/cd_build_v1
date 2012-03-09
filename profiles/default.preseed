@@ -1,0 +1,52 @@
+d-i netcfg/choose_interface select auto
+d-i netcfg/dhcp_failed note
+d-i netcfg/dhcp_options select Configure network manually
+d-i netcfg/disable_dhcp boolean false
+d-i netcfg/get_hostname string mail
+d-i netcfg/get_hostname seen false
+d-i netcfg/get_domain string unassigned-domain
+d-i netcfg/get_domain seen false
+d-i mirror/country string manual
+d-i mirror/http/hostname string ftp.debian.org
+d-i mirror/http/directory string /debian
+d-i mirror/http/proxy string
+d-i clock-setup/utc boolean true
+d-i time/zone string Europe/Paris
+d-i clock-setup/ntp boolean true
+d-i clock-setup/ntp-server string 3.fr.pool.ntp.org
+d-i partman-auto/method string regular
+d-i partman-auto/choose_recipe select atomic
+d-i partman/confirm_write_new_label boolean true
+d-i partman/choose_partition select Finish partitioning and write changes to disk
+d-i partman/confirm boolean true
+d-i passwd/make-user boolean fasle
+d-i apt-setup/non-free boolean true
+d-i apt-setup/contrib boolean true
+d-i apt-setup/local0/repository string \
+	http://lemonldap-ng.org/deb squeeze main
+d-i debian-installer/allow_unauthenticated string true
+tasksel tasksel/first multiselect standard, web-server, ssh-server
+d-i pkgsel/include string htop vim postfix mysql-server dovecot-imapd php5 libapache2-mod-php5 slapd php5-ldap php5-mysql postfix-ldap \
+	lemonldap-ng console-setup acpi-support-base postfix-policyd-spf-perl postgrey amavisd-new  libdbd-ldap-perl clamav clamav-daemon gzip bzip2 unzip unrar zoo arj \
+	spamassassin libnet-dns-perl razor pyzor php5-gd php5-curl ejabberd ldap-utils libiconv-hook1 php5-mcrypt php5-intl fail2ban nagios-plugins libapache2-mod-wsgi python-pip
+popularity-contest popularity-contest/participate boolean false
+d-i grub-installer/only_debian boolean true
+d-i grub-installer/with_other_os boolean true
+d-i finish-install/reboot_in_progress note
+d-i cdrom-detect/eject boolean true
+d-i debian-installer/exit/reboot boolean true
+postfix	postfix/main_mailer_type	select	Internet Site
+mysql-server-5.1 mysql-server/root_password password 
+mysql-server-5.1 mysql-server/root_password_again password
+samba-common samba-common/workgroup string WORKGROUP
+samba-common samba-common/workgroup boolean true
+d-i preseed/late_command string \
+	cp cdrom/simple-cdd/.bashrc /target/root; \
+	cp cdrom/simple-cdd/.vimrc /target/root; \
+	cp cdrom/simple-cdd/config.tar.gz /target/root; \
+	cp cdrom/simple-cdd/yunohost_update /target/usr/local/bin; \ 
+	cp cdrom/simple-cdd/post-install.sh /target; \
+	cd /target; \
+	chmod +x ./post-install.sh; \
+	chroot ./ ./post-install.sh; \
+	rm -f ./post-install.sh

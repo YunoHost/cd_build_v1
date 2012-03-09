@@ -1,0 +1,56 @@
+<VirtualHost *:80>
+
+	ServerName sync.yunohost.org
+	RewriteEngine On
+	RewriteCond %{HTTPS} off
+	RewriteRule (.*) https://sync.yunohost.org%{REQUEST_URI}
+
+</VirtualHost>
+
+<VirtualHost *:443>
+	SSLEngine On
+        SSLCertificateFile /etc/ssl/certs/yunohost_crt.pem
+        SSLCertificateKeyFile /etc/ssl/private/yunohost_key.pem
+        SSLCACertificateFile /etc/ssl/certs/ca-yunohost_crt.pem
+
+
+	ServerAdmin webmaster@yunohost.org
+
+	ServerName sync.yunohost.org
+
+	WSGIDaemonProcess radicale user=www-data group=www-data threads=1
+	WSGIScriptAlias / /var/www/yunohost/sync/radicale.wsgi
+	WSGIPassAuthorization On
+
+	<Directory /var/www/yunohost/sync>
+        	WSGIProcessGroup radicale
+        	WSGIApplicationGroup %{GLOBAL}
+        	
+		AuthBasicProvider ldap
+                AuthzLDAPAuthoritative Off
+                AuthName "Radical Server"
+                AuthType Basic
+                AuthLDAPURL ldap://localhost/ou=users,dc=yunohost,dc=org?uid
+                Require valid-user
+
+		AllowOverride None
+        	Order allow,deny
+        	allow from all
+		
+		RewriteEngine On
+		RewriteCond %{REMOTE_USER}%{PATH_INFO} !^([^/]+/)\1
+		RewriteRule .* - [Forbidden]
+		
+	</Directory>
+	
+
+	ErrorLog /var/log/apache2/sync-error.log
+
+        # Possible values include: debug, info, notice, warn, error, crit,
+        # alert, emerg.
+        LogLevel error
+
+        CustomLog /var/log/apache2/sync-access.log combined
+
+
+</VirtualHost>

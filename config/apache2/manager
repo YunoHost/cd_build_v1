@@ -1,0 +1,84 @@
+#====================================================================
+# Apache configuration for LemonLDAP::NG Manager
+#====================================================================
+
+# Uncomment this if no previous NameVirtualHost declaration
+#NameVirtualHost *:80
+<VirtualHost *:80>
+
+        ServerName manager.yunohost.org
+        RewriteEngine On
+        RewriteCond %{HTTPS} off
+        RewriteRule (.*) https://manager.yunohost.org%{REQUEST_URI}
+
+</VirtualHost>
+
+
+
+# Manager virtual host (manager.example.com)
+<VirtualHost *:443>
+    ServerName manager.yunohost.org
+
+    SSLEngine On
+    SSLCertificateFile /etc/ssl/certs/yunohost_crt.pem
+    SSLCertificateKeyFile /etc/ssl/private/yunohost_key.pem
+    SSLCACertificateFile /etc/ssl/certs/ca-yunohost_crt.pem
+
+    # DocumentRoot
+    DocumentRoot /var/lib/lemonldap-ng/manager/
+    <Directory /var/lib/lemonldap-ng/manager/>
+	Order deny,allow
+	Deny from all
+	Allow from all
+	Options +ExecCGI
+    </Directory>
+
+    # On-line documentation
+    Alias /doc/ /usr/share/doc/lemonldap-ng-doc/
+    Alias /lib/ /usr/share/doc/lemonldap-ng-doc/lib/
+    <Directory /usr/share/doc/lemonldap-ng-doc/>
+	Order deny,allow
+	Allow from all
+	ErrorDocument 404 /notfound.html
+    </Directory>
+
+    # Perl script
+    # Note: to avoid manager stay in memory, we don't use ModPerl::Registry
+    #       by default. Change this to increase manager performances
+    <Files *.pl>
+        SetHandler cgi-script
+        #SetHandler perl-script
+        #PerlResponseHandler ModPerl::Registry
+    </Files>
+
+    # Directory index
+    <IfModule mod_dir.c>
+        DirectoryIndex index.pl index.html
+    </IfModule>
+
+    <Location />
+        <IfModule mod_deflate.c>
+		AddOutputFilterByType DEFLATE text/html text/plain text/xml text/javascript text/css
+		SetOutputFilter DEFLATE
+		BrowserMatch ^Mozilla/4 gzip-only-text/html
+		BrowserMatch ^Mozilla/4\.0[678] no-gzip
+		BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+		SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip dont-vary
+        </IfModule>
+        <IfModule mod_headers.c>
+		Header append Vary User-Agent env=!dont-vary
+        </IfModule>
+    </Location>
+    <Location /doc/>
+	<IfModule mod_expires.c>
+		ExpiresActive On
+		ExpiresDefault "access plus 1 month"
+	</IfModule>
+    </Location>
+    <Location /skins/>
+	<IfModule mod_expires.c>
+		ExpiresActive On
+		ExpiresDefault "access plus 1 month"
+	</IfModule>
+    </Location>
+</VirtualHost>

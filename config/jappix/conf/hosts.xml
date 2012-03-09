@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<jappix xmlns="jappix:conf:hosts">
+	<main>yunohost.org</main>
+	<muc>conference.yunohost.org</muc>
+	<pubsub>pubsub.yunohost.org</pubsub>
+	<vjud>vjud.jappix.com</vjud>
+	<anonymous>anonymous.jappix.com</anonymous>
+	<bosh>https://bind.yunohost.org/</bosh>
+	<bosh_main></bosh_main>
+	<bosh_mini></bosh_mini>
+	<static>.</static>
+	<upload></upload>
+</jappix>
