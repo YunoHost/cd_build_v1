@@ -1,0 +1,31 @@
+dn: ou=domains,dc=yunohost,dc=org
+objectclass: organizationalUnit
+objectclass: top
+ou: domains
+
+dn: virtualdomain=yunohost.org,ou=domains,dc=yunohost,dc=org
+objectclass: mailDomain
+objectclass: top
+virtualdomain: yunohost.org
+
+dn: ou=groups,dc=yunohost,dc=org
+objectclass: organizationalUnit
+objectclass: top
+ou: groups
+
+dn: ou=users,dc=yunohost,dc=org
+objectclass: organizationalUnit
+objectclass: top
+ou: users
+
+dn: cn=Adrien Beudin,ou=users,dc=yunohost,dc=org
+cn: Adrien Beudin
+displayname: Adrien Beudin
+givenname: Adrien
+mail: beudbeud@yunohost.org
+mailalias: adrien@yunohost.org
+objectclass: inetOrgPerson
+objectclass: mailAccount
+sn: Beudin
+uid: beudbeud
+userpassword: yunohost

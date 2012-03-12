@@ -1,0 +1,58 @@
+#!/bin/sh -e
+
+### BEGIN INIT INFO
+# Provides:             iptable
+# Required-Start:       $remote_fs $syslog
+# Required-Stop:        $remote_fs $syslog
+# Default-Start:        2 3 4 5
+# Default-Stop:         
+# Short-Description:    Iptable configure
+### END INIT INFO
+
+case "$1" in
+start)
+	iptables -F
+	iptables -X
+	iptables -A INPUT -m state --state ESTABLISHED -j ACCEPT
+
+	##SSH
+	iptables -A INPUT -p tcp -i eth0 --dport ssh -j ACCEPT
+
+	##WEB
+	iptables -A INPUT -p tcp -i eth0 --dport 80 -j ACCEPT
+	iptables -A INPUT -p tcp -i eth0 --dport 443 -j ACCEPT
+
+	##MAIL
+	iptables -A INPUT -p tcp -i eth0 --dport 993 -j ACCEPT
+	iptables -A INPUT -p tcp -i eth0 --dport 465 -j ACCEPT
+
+	##JABBER
+	iptables -A INPUT -p tcp -i eth0 --dport 5269 -j ACCEPT
+	iptables -A INPUT -p tcp -i eth0 --dport 5222 -j ACCEPT
+
+	#Tous les ports ouvert sur localhost
+	iptables -A INPUT -i lo -j ACCEPT
+
+	#Réponse au ping
+	iptables -A INPUT -p icmp -j ACCEPT
+	iptables -A INPUT -j DROP
+
+	#IP6
+        ip6tables -A INPUT -i lo -j ACCEPT
+        ip6tables -A INPUT -p icmp -j ACCEPT
+        ip6tables -A INPUT -j DROP
+
+	/etc/init.d/fail2ban restart
+        ;;
+stop)
+        iptables -F
+        iptables -X
+        /etc/init.d/fail2ban stop
+        ;;
+
+  *)
+        echo "Usage: /etc/init.d/iptable {start|stop}"
+        exit 1
+esac
+
+exit 0

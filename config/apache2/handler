@@ -1,0 +1,37 @@
+#====================================================================
+# Apache configuration for LemonLDAP::NG Handler
+#====================================================================
+
+# Uncomment this if no previous NameVirtualHost declaration
+#NameVirtualHost *:80
+
+# Load LemonLDAP::NG Handler
+PerlOptions +GlobalRequest
+PerlRequire /var/lib/lemonldap-ng/handler//MyHandler.pm
+
+# Common error page and security parameters
+ErrorDocument 403 http://auth.yunohost.org/?lmError=403
+ErrorDocument 500 http://auth.yunohost.org/?lmError=500
+
+<VirtualHost *:80>
+    ServerName reload.yunohost.org
+
+    # Configuration reload mechanism (only 1 per physical server is
+    # needed): choose your URL to avoid restarting Apache when
+    # configuration change
+    <Location /reload>
+        Order deny,allow
+        Deny from all
+        Allow from 127.0.0.0/8
+        PerlHeaderParserHandler My::Package->refresh
+    </Location>
+
+    # Uncomment this to activate status module
+    #<Location /status>
+    #    Order deny,allow
+    #    Deny from all
+    #    Allow from 127.0.0.0/8
+    #    PerlHeaderParserHandler My::Package->status
+    #</Location>
+
+</VirtualHost>

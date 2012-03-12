@@ -1,0 +1,47 @@
+PerlRequire /var/lib/lemonldap-ng/handler/MyHandler.pm
+
+<VirtualHost *:80>
+	
+	ServerName www.yunohost.org
+	RewriteEngine On
+        RewriteCond %{HTTPS} off
+        RewriteRule (.*) https://www.yunohost.org%{REQUEST_URI}
+
+</VirtualHost>
+
+<VirtualHost *:443>
+	
+	ServerName www.yunohost.org
+	SSLEngine On
+        SSLCertificateFile /etc/ssl/certs/yunohost_crt.pem
+        SSLCertificateKeyFile /etc/ssl/private/yunohost_key.pem
+	SSLCACertificateFile /etc/ssl/certs/ca-yunohost_crt.pem
+
+	ServerAdmin webmaster@yunohost.org
+
+        PerlOptions     +GlobalRequest
+        PerlHeaderParserHandler My::Package
+
+	DocumentRoot /var/www/yunohost/www/
+
+	<Directory />
+                Options FollowSymLinks
+                AllowOverride None
+        </Directory>
+
+        <Directory /var/www/yunohost/www/>
+                Options Indexes +FollowSymLinks MultiViews
+                AllowOverride all
+                Order allow,deny
+                allow from all
+        </Directory>
+
+	ErrorLog ${APACHE_LOG_DIR}/www-error.log
+
+	# Possible values include: debug, info, notice, warn, error, crit,
+	# alert, emerg.
+	LogLevel error
+	
+	CustomLog ${APACHE_LOG_DIR}/www-access.log combined
+
+</VirtualHost>

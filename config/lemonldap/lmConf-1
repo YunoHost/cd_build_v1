@@ -1,0 +1,380 @@
+AuthLDAPFilter
+	'(&(uid=$user)(objectClass=inetOrgPerson))'
+
+LDAPFilter
+	'(&(uid=$user)(objectClass=inetOrgPerson)))'
+
+Soap
+	1
+
+applicationList
+	'$data1 = {&#39;webservices&#39; => {&#39;webmail&#39; => {&#39;options&#39; => {&#39;logo&#39; => &#39;mailappt.png&#39;,&#39;name&#39; => &#39;Webmail&#39;,&#39;display&#39; => &#39;auto&#39;,&#39;uri&#39; => &#39;https://webmail.yunohost.org/&#39;},&#39;type&#39; => &#39;application&#39;},&#39;rss&#39; => {&#39;options&#39; => {&#39;logo&#39; => &#39;bookmark.png&#39;,&#39;name&#39; => &#39;RSS&#39;,&#39;display&#39; => &#39;auto&#39;,&#39;uri&#39; => &#39;https://rss.yunohost.org/&#39;},&#39;type&#39; => &#39;application&#39;},&#39;type&#39; => &#39;category&#39;,&#39;catname&#39; => &#39;Services Web&#39;,&#39;chat&#39; => {&#39;options&#39; => {&#39;logo&#39; => &#39;tux.png&#39;,&#39;name&#39; => &#39;Chat&#39;,&#39;display&#39; => &#39;auto&#39;,&#39;uri&#39; => &#39;https://im.yunohost.org&#39;},&#39;type&#39; => &#39;application&#39;},&#39;calendar&#39; => {&#39;options&#39; => {&#39;logo&#39; => &#39;bell.png&#39;,&#39;name&#39; => &#39;Calendrier&#39;,&#39;display&#39; => &#39;auto&#39;,&#39;uri&#39; => &#39;https://webmail.yunohost.org/?_task=dummy&_action=plugin.calendar&#39;},&#39;type&#39; => &#39;application&#39;}}};'
+
+authentication
+	'LDAP'
+
+casAccessControlPolicy
+	'none'
+
+casStorageOptions
+	'$data1 = {};'
+
+cda
+	0
+
+cfgAuthor
+	'anonymous'
+
+cfgAuthorIP
+	'192.168.1.104'
+
+cfgDate
+	1330526291
+
+cfgNum
+	3
+
+cookieName
+	'lemonldap'
+
+domain
+	'yunohost.org'
+
+exportedHeaders
+	'$data1 = {&#39;im.yunohost.org&#39; => {&#39;Email&#39; => &#39;$mail&#39;,&#39;Authorization&#39; => &#39;"Basic ".encode_base64("$uid:$_password")&#39;},&#39;webmail.yunohost.org&#39; => {&#39;Auth-User&#39; => &#39;$uid&#39;,&#39;Email&#39; => &#39;$mail&#39;,&#39;Name&#39; => &#39;$cn&#39;,&#39;Authorization&#39; => &#39;"Basic ".encode_base64("$uid:$_password")&#39;},&#39;admin.yunohost.org&#39; => {&#39;Auth-User&#39; => &#39;$uid&#39;},&#39;manager.yunohost.org&#39; => {&#39;Auth-User&#39; => &#39;$uid&#39;},&#39;www.yunohost.org&#39; => {&#39;Auth-User&#39; => &#39;$uid&#39;},&#39;rss.yunohost.org&#39; => {&#39;Auth-User&#39; => &#39;$uid&#39;}};'
+
+exportedVars
+	'$data1 = {&#39;uid&#39; => &#39;uid&#39;,&#39;cn&#39; => &#39;cn&#39;,&#39;sn&#39; => &#39;sn&#39;,&#39;mail&#39; => &#39;mail&#39;,&#39;givenName&#39; => &#39;givenName&#39;};'
+
+globalStorage
+	'Apache::Session::File'
+
+globalStorageOptions
+	'$data1 = {&#39;Directory&#39; => &#39;/var/lib/lemonldap-ng/sessions&#39;,&#39;LockDirectory&#39; => &#39;/var/lib/lemonldap-ng/sessions/lock&#39;};'
+
+groups
+	'$data1 = {};'
+
+hideOldPassword
+	1
+
+httpOnly
+	1
+
+https
+	1
+
+issuerDBCASActivation
+	0
+
+issuerDBCASPath
+	'^/cas/'
+
+issuerDBCASRule
+	1
+
+issuerDBOpenIDActivation
+	0
+
+issuerDBOpenIDPath
+	'^/openidserver/'
+
+issuerDBOpenIDRule
+	1
+
+issuerDBSAMLActivation
+	0
+
+issuerDBSAMLPath
+	'^/saml/'
+
+issuerDBSAMLRule
+	1
+
+key
+	'J"]F[C_U@!ALe]w;'
+
+ldapAuthnLevel
+	2
+
+ldapBase
+	'dc=yunohost,dc=org'
+
+ldapChangePasswordAsUser
+	1
+
+ldapGroupRecursive
+	0
+
+ldapPasswordResetAttribute
+	'pwdReset'
+
+ldapPasswordResetAttributeValue
+	'TRUE'
+
+ldapPort
+	389
+
+ldapPpolicyControl
+	1
+
+ldapPwdEnc
+	'utf-8'
+
+ldapServer
+	'localhost'
+
+ldapSetPassword
+	0
+
+ldapTimeout
+	120
+
+ldapUsePasswordResetAttribute
+	1
+
+ldapVersion
+	3
+
+locationRules
+	'$data1 = {&#39;im.yunohost.org&#39; => {&#39;default&#39; => &#39;accept&#39;},&#39;webmail.yunohost.org&#39; => {&#39;default&#39; => &#39;accept&#39;,&#39;^/index.pl\\?logout=1&#39; => &#39;logout_app_sso https://www.yunohost.org/&#39;},&#39;admin.yunohost.org&#39; => {&#39;default&#39; => &#39;accept&#39;},&#39;manager.yunohost.org&#39; => {&#39;default&#39; => &#39;deny&#39;},&#39;www.yunohost.org&#39; => {&#39;default&#39; => &#39;accept&#39;},&#39;rss.yunohost.org&#39; => {&#39;default&#39; => &#39;accept&#39;,&#39;^/logout&#39; => &#39;logout_sso http://auth.yunohost.org&#39;}};'
+
+logoutServices
+	'$data1 = {};'
+
+macros
+	'$data1 = {&#39;_whatToTrace&#39; => &#39;$_auth eq \&#39;LDAP\&#39; ? $uid : ($_auth eq \&#39;SAML\&#39; ? "$_user\\@$_idpConfKey" : "$_user\\@$_auth" )&#39;};'
+
+mailCharset
+	'utf-8'
+
+mailSessionKey
+	'mail'
+
+mailTimeout
+	0
+
+notification
+	0
+
+notificationStorage
+	'File'
+
+notificationWildcard
+	'allusers'
+
+notifyDeleted
+	1
+
+notifyOther
+	0
+
+openIdSreg_email
+	'mail'
+
+openIdSreg_fullname
+	'cn'
+
+openIdSreg_nickname
+	'uid'
+
+openIdSreg_timezone
+	'_timezone'
+
+passwordDB
+	'LDAP'
+
+port
+	0
+
+portal
+	'http://auth.yunohost.org'
+
+portalAntiFrame
+	1
+
+portalAutocomplete
+	1
+
+portalDisplayAppslist
+	1
+
+portalDisplayChangePassword
+	'$_auth eq "LDAP" or $_auth eq "DBI"'
+
+portalDisplayLogout
+	1
+
+portalDisplayResetPassword
+	1
+
+portalForceAuthn
+	0
+
+portalOpenLinkInNewWindow
+	0
+
+portalRequireOldPassword
+	1
+
+portalSkin
+	'pastel'
+
+portalUserAttr
+	'_user'
+
+samlAttributeAuthorityDescriptorAttributeServiceSOAP
+	'urn:oasis:names:tc:SAML:2.0:bindings:SOAP;#PORTAL#/saml/AA/SOAP;'
+
+samlAuthnContextMapKerberos
+	4
+
+samlAuthnContextMapPasswordProtectedTransport
+	3
+
+samlAuthnContextMapTLSClient
+	5
+
+samlCommonDomainCookieActivation
+	0
+
+samlEntityID
+	'#PORTAL#/saml/metadata'
+
+samlIDPSSODescriptorArtifactResolutionServiceArtifact
+	'1;0;urn:oasis:names:tc:SAML:2.0:bindings:SOAP;#PORTAL#/saml/artifact'
+
+samlIDPSSODescriptorSingleLogoutServiceHTTPPost
+	'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST;#PORTAL#/saml/singleLogout;#PORTAL#/saml/singleLogoutReturn'
+
+samlIDPSSODescriptorSingleLogoutServiceHTTPRedirect
+	'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect;#PORTAL#/saml/singleLogout;#PORTAL#/saml/singleLogoutReturn'
+
+samlIDPSSODescriptorSingleLogoutServiceSOAP
+	'urn:oasis:names:tc:SAML:2.0:bindings:SOAP;#PORTAL#/saml/singleLogoutSOAP;'
+
+samlIDPSSODescriptorSingleSignOnServiceHTTPArtifact
+	'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact;#PORTAL#/saml/singleSignOnArtifact;'
+
+samlIDPSSODescriptorSingleSignOnServiceHTTPPost
+	'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST;#PORTAL#/saml/singleSignOn;'
+
+samlIDPSSODescriptorSingleSignOnServiceHTTPRedirect
+	'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect;#PORTAL#/saml/singleSignOn;'
+
+samlIDPSSODescriptorSingleSignOnServiceSOAP
+	'urn:oasis:names:tc:SAML:2.0:bindings:SOAP;#PORTAL#/saml/singleSignOnSOAP;'
+
+samlIDPSSODescriptorWantAuthnRequestsSigned
+	1
+
+samlMetadataForceUTF8
+	1
+
+samlNameIDFormatMapEmail
+	'mail'
+
+samlNameIDFormatMapKerberos
+	'uid'
+
+samlNameIDFormatMapWindows
+	'uid'
+
+samlNameIDFormatMapX509
+	'mail'
+
+samlOrganizationDisplayName
+	'Example'
+
+samlOrganizationName
+	'Example'
+
+samlOrganizationURL
+	'http://www.example.com'
+
+samlSPSSODescriptorArtifactResolutionServiceArtifact
+	'1;0;urn:oasis:names:tc:SAML:2.0:bindings:SOAP;#PORTAL#/saml/artifact'
+
+samlSPSSODescriptorAssertionConsumerServiceHTTPArtifact
+	'1;0;urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact;#PORTAL#/saml/proxySingleSignOnArtifact'
+
+samlSPSSODescriptorAssertionConsumerServiceHTTPPost
+	'0;1;urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST;#PORTAL#/saml/proxySingleSignOnPost'
+
+samlSPSSODescriptorAuthnRequestsSigned
+	1
+
+samlSPSSODescriptorSingleLogoutServiceHTTPPost
+	'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST;#PORTAL#/saml/proxySingleLogout;#PORTAL#/saml/proxySingleLogoutReturn'
+
+samlSPSSODescriptorSingleLogoutServiceHTTPRedirect
+	'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect;#PORTAL#/saml/proxySingleLogout;#PORTAL#/saml/proxySingleLogoutReturn'
+
+samlSPSSODescriptorSingleLogoutServiceSOAP
+	'urn:oasis:names:tc:SAML:2.0:bindings:SOAP;#PORTAL#/saml/proxySingleLogoutSOAP;'
+
+samlSPSSODescriptorWantAssertionsSigned
+	1
+
+secureTokenAllowOnError
+	1
+
+secureTokenAttribute
+	'uid'
+
+secureTokenExpiration
+	60
+
+secureTokenHeader
+	'Auth-Token'
+
+secureTokenMemcachedServers
+	'127.0.0.1:11211'
+
+secureTokenUrls
+	'.*'
+
+securedCookie
+	0
+
+singleIP
+	0
+
+singleSession
+	0
+
+singleUserByIP
+	0
+
+storePassword
+	1
+
+timeout
+	72000
+
+timeoutActivity
+	0
+
+useRedirectOnError
+	0
+
+useRedirectOnForbidden
+	0
+
+useSafeJail
+	1
+
+useXForwardedForIP
+	0
+
+userControl
+	'^[\w\.\-@]+$'
+
+userDB
+	'LDAP'
+
+vhostOptions
+	'$data1 = {&#39;im.yunohost.org&#39; => {&#39;vhostPort&#39; => &#39;-1&#39;,&#39;vhostHttps&#39; => &#39;-1&#39;},&#39;webmail.yunohost.org&#39; => {&#39;vhostPort&#39; => &#39;-1&#39;,&#39;vhostHttps&#39; => &#39;-1&#39;},&#39;admin.yunohost.org&#39; => {&#39;vhostPort&#39; => &#39;-1&#39;,&#39;vhostHttps&#39; => &#39;-1&#39;},&#39;manager.yunohost.org&#39; => {&#39;vhostPort&#39; => &#39;-1&#39;,&#39;vhostHttps&#39; => &#39;-1&#39;},&#39;www.yunohost.org&#39; => {&#39;vhostPort&#39; => &#39;-1&#39;,&#39;vhostHttps&#39; => &#39;-1&#39;}};'
+
+whatToTrace
+	'$_whatToTrace'
