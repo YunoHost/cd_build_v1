@@ -77,57 +77,6 @@ su - amavis -c "pyzor discover"
 #Mysql
 /etc/init.d/mysql start
 
-#Roundcube
-wget http://chili.kload.fr/attachments/download/22/roundcubemail-0.7.1.tar.gz
-tar -xvzf roundcubemail-0.7.1.tar.gz
-mv roundcubemail-0.7.1/* /var/www/yunohost/webmail/ 
-echo -e "[suhosin]\nsuhosin.session.encrypt = Off" >> /etc/php5/apache2/php.ini
-ROUNDCUBE=$(randpass 10 0)
-mysql -e "create database roundcubemail;"
-mysql -e "GRANT ALL PRIVILEGES ON roundcubemail.* to 'roundcube'@'localhost' IDENTIFIED BY '$ROUNDCUBE';"
-deskey=$(dd if=/dev/urandom bs=1 count=200 2> /dev/null | tr -c -d '[A-Za-z0-9]' | sed -n 's/\(.\{24\}\).*/\1/p')
-sed -i "s/changethedeskey/$deskey/g" config/roundcube/main.inc.php
-mysql roundcubemail < /var/www/yunohost/webmail/SQL/mysql.initial.sql
-sed -i "s/pass/$ROUNDCUBE/g" config/roundcube/db.inc.php
-wget http://chili.kload.fr/attachments/download/25/roundcube-0.7.1-bundle-v1.6.zip
-unzip roundcube-0.7.1-bundle-v1.6.zip
-cp -r trunk/plugins/logout_redirect/ /var/www/yunohost/webmail/plugins/
-cp -r  trunk/plugins/calendar/ /var/www/yunohost/webmail/plugins/
-cp -r  trunk/plugins/qtip/ /var/www/yunohost/webmail/plugins/
-cp -r  trunk/plugins/http_auth/ /var/www/yunohost/webmail/plugins/
-mysql roundcubemail < /var/www/yunohost/webmail/plugins/calendar/SQL/mysql.sql
-cp config/roundcube/* /var/www/yunohost/webmail/config/
-cp -r config/roundcube/plugins/* /var/www/yunohost/webmail/plugins/
-chown -R www-data:www-data /var/www/yunohost/webmail/
-rm -Rf /var/www/yunohost/webmail/installer/
-
-#Jappix
-wget http://chili.kload.fr/attachments/download/23/jappix-spaco-0.9.zip
-unzip jappix-spaco-0.9.zip
-mv jappix/* /var/www/yunohost/chat/
-cp -r config/jappix/* /var/www/yunohost/chat/store/
-chmod 777 /var/www/yunohost/chat/store/*
-chown -R www-data:www-data /var/www/yunohost/chat/
-
-#Tiny Tiny RSS
-wget http://chili.kload.fr/attachments/download/24/tt-rss-1.5.10.tar.gz
-tar -xvzf tt-rss-1.5.10.tar.gz
-mv tt-rss-1.5.10/* /var/www/yunohost/rss/
-TTRSS=$(randpass 10 0)
-mysql -e "create database ttrss;"
-mysql -e "GRANT ALL PRIVILEGES ON ttrss.* to 'ttrss'@'localhost' IDENTIFIED BY '$TTRSS';"
-mysql ttrss < /var/www/yunohost/rss/schema/ttrss_schema_mysql.sql
-sed -i "s/passmysql/$TTRSS/g" config/ttrss/config.php
-cp config/ttrss/config.php /var/www/yunohost/rss/
-chown -R www-data:www-data /var/www/yunohost/rss/
-
-#Radicale
-pip install radicale
-mkdir /var/www/.config/
-chown www-data:www-data /var/www/.config/
-cp config/radicale/radicale.wsgi /var/www/yunohost/sync/
-chown -R www-data:www-data /var/www/yunohost/sync/
-
 #Iptables
 cp config/autre/iptables /etc/init.d/
 update-rc.d iptables defaults

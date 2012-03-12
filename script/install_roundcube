@@ -1,0 +1,38 @@
+#!/bin/bash
+
+DC=$(slapcat | cut -d" " -f2 | grep ^dc -m1)
+DOMAIN=$(hostname -d)
+
+HOSTNAME=$(hostname -f)
+
+function randpass() {
+  [ "$2" == "0" ] && CHAR="[:alnum:]" || CHAR="[:graph:]"
+    cat /dev/urandom | tr -cd "$CHAR" | head -c ${1:-32}
+    echo
+}
+
+cd /root/
+
+#Roundcube
+wget http://chili.kload.fr/attachments/download/22/roundcubemail-0.7.1.tar.gz
+tar -xvzf roundcubemail-0.7.1.tar.gz
+mv roundcubemail-0.7.1/* /var/www/yunohost/webmail/ 
+echo -e "[suhosin]\nsuhosin.session.encrypt = Off" >> /etc/php5/apache2/php.ini
+ROUNDCUBE=$(randpass 10 0)
+mysql -e "create database roundcubemail;"
+mysql -e "GRANT ALL PRIVILEGES ON roundcubemail.* to 'roundcube'@'localhost' IDENTIFIED BY '$ROUNDCUBE';"
+deskey=$(dd if=/dev/urandom bs=1 count=200 2> /dev/null | tr -c -d '[A-Za-z0-9]' | sed -n 's/\(.\{24\}\).*/\1/p')
+sed -i "s/changethedeskey/$deskey/g" config/roundcube/main.inc.php
+mysql roundcubemail < /var/www/yunohost/webmail/SQL/mysql.initial.sql
+sed -i "s/pass/$ROUNDCUBE/g" config/roundcube/db.inc.php
+wget http://chili.kload.fr/attachments/download/25/roundcube-0.7.1-bundle-v1.6.zip
+unzip roundcube-0.7.1-bundle-v1.6.zip
+cp -r trunk/plugins/logout_redirect/ /var/www/yunohost/webmail/plugins/
+cp -r  trunk/plugins/calendar/ /var/www/yunohost/webmail/plugins/
+cp -r  trunk/plugins/qtip/ /var/www/yunohost/webmail/plugins/
+cp -r  trunk/plugins/http_auth/ /var/www/yunohost/webmail/plugins/
+mysql roundcubemail < /var/www/yunohost/webmail/plugins/calendar/SQL/mysql.sql
+cp config/roundcube/* /var/www/yunohost/webmail/config/
+cp -r config/roundcube/plugins/* /var/www/yunohost/webmail/plugins/
+chown -R www-data:www-data /var/www/yunohost/webmail/
+rm -Rf /var/www/yunohost/webmail/installer/

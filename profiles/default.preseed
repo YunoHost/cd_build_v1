@@ -44,7 +44,7 @@ d-i preseed/late_command string \
 	cp cdrom/simple-cdd/.bashrc /target/root; \
 	cp cdrom/simple-cdd/.vimrc /target/root; \
 	cp cdrom/simple-cdd/config.tar.gz /target/root; \
-	cp cdrom/simple-cdd/yunohost_update /target/usr/local/bin; \ 
+	cp cdrom/simple-cdd/script.tar.gz /target/root; \
 	cp cdrom/simple-cdd/post-install.sh /target; \
 	cd /target; \
 	chmod +x ./post-install.sh; \
