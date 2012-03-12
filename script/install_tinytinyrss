@@ -14,6 +14,8 @@ function randpass() {
 cd /root/
 
 #Tiny Tiny RSS
+mkdir -p /var/www/yunohost/rss
+cp config/apache2/rss /etc/apache2/sites-available/
 wget http://chili.kload.fr/attachments/download/24/tt-rss-1.5.10.tar.gz
 tar -xvzf tt-rss-1.5.10.tar.gz
 mv tt-rss-1.5.10/* /var/www/yunohost/rss/
@@ -24,3 +26,4 @@ mysql ttrss < /var/www/yunohost/rss/schema/ttrss_schema_mysql.sql
 sed -i "s/passmysql/$TTRSS/g" config/ttrss/config.php
 cp config/ttrss/config.php /var/www/yunohost/rss/
 chown -R www-data:www-data /var/www/yunohost/rss/
+a2ensite rss

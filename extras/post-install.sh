@@ -28,10 +28,10 @@ cp config/ssl/yunoCA/newcerts/01.pem /etc/ssl/certs/yunohost_crt.pem
 
 #Apache2
 a2enmod rewrite ssl perl headers proxy_http authnz_ldap 
-mkdir -p /var/www/yunohost/{chat,rss,webmail,www,admin,sync}
-cp config/apache2/{chat,handler,manager,portal,rss,webmail,www,admin,bind,sync} /etc/apache2/sites-available/
+mkdir -p /var/www/yunohost/{www,admin}
+cp config/apache2/{handler,manager,portal,www,admin} /etc/apache2/sites-available/
 cp config/apache2/ports.conf /etc/apache2/
-a2ensite chat handler manager portal rss webmail www admin bind sync
+a2ensite handler manager portal www admin
 a2dissite default  default-ssl
 
 #OpenLDAP

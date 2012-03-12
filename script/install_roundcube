@@ -14,6 +14,8 @@ function randpass() {
 cd /root/
 
 #Roundcube
+mkdir -p /var/www/yunohost/webmail
+cp config/apache2/webmail /etc/apache2/sites-available/
 wget http://chili.kload.fr/attachments/download/22/roundcubemail-0.7.1.tar.gz
 tar -xvzf roundcubemail-0.7.1.tar.gz
 mv roundcubemail-0.7.1/* /var/www/yunohost/webmail/ 
@@ -36,3 +38,4 @@ cp config/roundcube/* /var/www/yunohost/webmail/config/
 cp -r config/roundcube/plugins/* /var/www/yunohost/webmail/plugins/
 chown -R www-data:www-data /var/www/yunohost/webmail/
 rm -Rf /var/www/yunohost/webmail/installer/
+a2ensite webmail
