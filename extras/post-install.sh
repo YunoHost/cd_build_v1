@@ -87,3 +87,7 @@ cp config/autre/hosts /etc/
 #Config yunohost
 mkdir /etc/yunohost/
 cp config/update/* /etc/yunohost/
+tar -xvzf script.tar.gz
+mkdir -p /usr/local/bin/
+chmod +x script/*
+cp -a script/* /usr/local/bin/
