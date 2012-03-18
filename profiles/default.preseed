@@ -24,11 +24,11 @@ d-i apt-setup/non-free boolean true
 d-i apt-setup/contrib boolean true
 d-i apt-setup/local0/repository string \
 	http://lemonldap-ng.org/deb squeeze main
+d-i apt-setup/local1/repository string \
+	http://repo.yunohost.org/ squeeze main 
 d-i debian-installer/allow_unauthenticated string true
 tasksel tasksel/first multiselect standard, web-server, ssh-server
-d-i pkgsel/include string htop vim postfix mysql-server dovecot-imapd php5 libapache2-mod-php5 slapd php5-ldap php5-mysql postfix-ldap \
-	lemonldap-ng console-setup acpi-support-base postfix-policyd-spf-perl postgrey amavisd-new  libdbd-ldap-perl clamav clamav-daemon gzip bzip2 unzip unrar zoo arj \
-	spamassassin libnet-dns-perl razor pyzor php5-gd php5-curl ejabberd ldap-utils libiconv-hook1 php5-mcrypt php5-intl fail2ban nagios-plugins libapache2-mod-wsgi python-pip
+d-i pkgsel/include postfix yunohost
 popularity-contest popularity-contest/participate boolean false
 d-i grub-installer/only_debian boolean true
 d-i grub-installer/with_other_os boolean true
