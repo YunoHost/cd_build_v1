@@ -1,5 +1,0 @@
-server_host = localhost
-server_port = 389
-search_base = dc=yunohost,dc=org
-query_filter = (&(objectClass=mailAccount)(mailalias=%s))
-result_attribute = mail
