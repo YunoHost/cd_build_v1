@@ -1,12 +1,11 @@
-==Fully automated webservices installer==
+Fully automated webservices installer
 * Mail server
 * Web syndication
 * Instant messaging
 * Calendar & contact synchonization
 
 
-
-==Open source components==
+Open source components
 * Debian 
 * Postfix
 * Dovecot
