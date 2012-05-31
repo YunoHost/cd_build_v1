@@ -1,14 +1,12 @@
-Full Automatic installer webservices
-
-* Webmail
-* Web syndication
-* Instant Messaging
+==Fully automated webservices installer==
 * Mail server
-* Synchonization calendar
+* Web syndication
+* Instant messaging
+* Calendar & contact synchonization
 
 
 
-Full Open source 
+==Open source components==
 * Debian 
 * Postfix
 * Dovecot
@@ -17,5 +15,6 @@ Full Open source
 * Ejabberd
 * LemonLDAP-NG
 * Tiny tiny RSS
+* Radicale
 * Roundcube
 * Jappix
