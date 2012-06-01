@@ -3,7 +3,7 @@ Fully automated webservices installer
 * Web syndication
 * Instant messaging
 * Calendar & contact synchonization
-
+* And More
 
 Open source components
 * Debian 
@@ -13,7 +13,7 @@ Open source components
 * Apache2
 * Ejabberd
 * LemonLDAP-NG
-* Tiny tiny RSS
-* Radicale
-* Roundcube
-* Jappix
+
+
+How-to build
+http://wiki.yunohost.org/BuildCD
