@@ -2,3 +2,8 @@
 less
 simple-cdd-profiles
 firmware-linux-nonfree
+firmware-bnx2
+firmware-bnx2x
+firmware-ipw2x00
+firmware-linux
+firmware-realtek

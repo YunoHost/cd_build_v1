@@ -42,6 +42,7 @@ d-i apt-setup/local0/repository string \
 	http://lemonldap-ng.org/deb squeeze main
 d-i apt-setup/local1/repository string \
 	http://repo.yunohost.org/ squeeze main
+d-i apt-setup/local0/key string http://lemonldap-ng.org/_media/rpm-gpg-key-ow2
 d-i apt-setup/local1/key string http://repo.yunohost.org/yunohost.asc
 d-i debian-installer/allow_unauthenticated string true
 tasksel tasksel/first multiselect standard, web-server, ssh-server
@@ -65,6 +66,7 @@ nslcd	nslcd/ldap-reqcert	select
 nslcd	nslcd/ldap-uris	string	ldap://localhost/
 nslcd	nslcd/ldap-binddn	string
 nslcd   nslcd/ldap-base  	string dc=yunohost,dc=org
+proftpd-basic	shared/proftpd/inetd_or_standalone	select standalone
 libnss-ldapd	libnss-ldapd/nsswitch multiselect group, passwd, shadow
 d-i preseed/late_command string \
 	cp cdrom/simple-cdd/.bashrc /target/root; \
