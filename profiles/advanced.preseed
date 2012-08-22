@@ -1,7 +1,6 @@
+d-i netcfg/use_dhcp false
 d-i netcfg/choose_interface select auto
 d-i netcfg/dhcp_failed note
-d-i netcfg/dhcp_options select Configure network manually
-d-i netcfg/disable_dhcp boolean false
 d-i netcfg/get_hostname string yunohost
 d-i netcfg/get_domain string mondomaine.fr
 d-i netcfg/get_domain seen false
@@ -9,31 +8,11 @@ d-i mirror/country string manual
 d-i mirror/http/hostname string ftp.debian.org
 d-i mirror/http/directory string /debian
 d-i mirror/http/proxy string
+d-i mirror/http/proxy seen false
 d-i clock-setup/utc boolean true
 d-i time/zone string Europe/Paris
 d-i clock-setup/ntp boolean true
 d-i clock-setup/ntp-server string 3.fr.pool.ntp.org
-d-i partman-auto/method string regular
-d-i partman-auto/expert_recipe string                           \
-        condpart ::                                             \
-        300 4000 7000 ext3                                      \
-                $primary{ } $bootable{ }                        \
-                method{ format } format{ }                      \
-                use_filesystem{ } filesystem{ ext3 }            \
-                mountpoint{ / }                                 \
-        .                                                       \
-        64 512 300% linux-swap                                  \
-                method{ swap } format{ }                        \
-        .                                                       \
-        100 10000 1000000000 ext3                               \
-                method{ keep } format{ }		        \
-                use_filesystem{ } filesystem{ ext3 }	        \
-                mountpoint{ /var }	                        \
-        .
-d-i partman/confirm_write_new_label boolean true
-d-i partman/choose_partition select finish
-d-i partman/confirm boolean false
-d-i partman/confirm_nooverwrite boolean true
 d-i passwd/root-password-crypted password $1$6xBdkGvE$8nLCNRxwABespdFJniEiX0
 d-i passwd/make-user boolean fasle
 d-i apt-setup/non-free boolean true
