@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BUILD="/home/yunohost/yunohost"
+BUILD="./"
 DATE=$(date +%m%d%y%H%M)
 
 function build-multi
@@ -8,7 +8,10 @@ function build-multi
 cd $BUILD
 build-simple-cdd --dist squeeze --force-preseed --conf ./simple-cdd-multi.conf 
 mv images/debian-6.0.5-i386-amd64-CD-1.iso images/yunohost-$DATE-multiarch.iso
-rm images/yunohost-latest-multiarch.iso
+if [[ -f images/yunohost-latest-multiarch.iso ]]
+then
+  rm images/yunohost-latest-multiarch.iso
+fi
 ln -s yunohost-$DATE-multiarch.iso images/yunohost-latest-multiarch.iso
 }
 
@@ -18,8 +21,14 @@ function build-i386
 cd $BUILD
 build-simple-cdd --dist squeeze --force-preseed --conf ./simple-cdd-i386.conf
 add-firmware-to images/debian-6.0.5-i386-CD-1.iso images/yunohost-$DATE-i386.iso squeeze
-rm images/debian-6.0.5-i386-CD-1.iso
-rm images/yunohost-latest-i386.iso
+if [[ -f images/debian-6.0.5-i386-CD-1.iso ]]
+then
+  rm images/debian-6.0.5-i386-CD-1.iso
+fi
+if [[ -f images/yunohost-latest-i386.iso ]]
+then
+  rm images/yunohost-latest-i386.iso
+fi
 ln -s yunohost-$DATE-i386.iso images/yunohost-latest-i386.iso
 }
 
@@ -28,8 +37,14 @@ function build-amd64
 cd $BUILD
 build-simple-cdd --dist squeeze --force-preseed --conf ./simple-cdd-amd64.conf
 add-firmware-to images/debian-6.0.5-amd64-CD-1.iso images/yunohost-$DATE-amd64.iso squeeze
-rm images/debian-6.0.5-amd64-CD-1.iso
-rm images/yunohost-latest-amd64.iso
+if [[ -f images/debian-6.0.5-amd64-CD-1.iso ]]
+then
+  rm images/debian-6.0.5-amd64-CD-1.iso
+fi
+if [[ -f images/yunohost-latest-amd64.iso ]]
+then
+  rm images/yunohost-latest-amd64.iso
+fi
 ln -s yunohost-$DATE-amd64.iso images/yunohost-latest-amd64.iso
 }
 
