@@ -1,0 +1,164 @@
+#!/bin/bash
+#
+# add-firmware-to: Add non-free firmware to Debian install media
+#
+# Copyright (C) 2008-2009 dann frazier <dannf@debian.org>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# Changelog:
+# 2012.06.20 - Add custum pics for debian installer (beudbeud)
+# 2011.02.08 - Add support for initrd.img files (same as initrd.gz)
+#              (Andrew McGlashan)
+# 2009.02.17 - Add support for isolinux-based CD images,
+#              which should work for i386/amd64 - happy
+#              to add other archs upon request
+# 2008.??.?? - Initial creation, just works on initrds
+#
+ 
+set -e
+
+is_iso() {
+   file "$1" | grep -q "ISO 9660"
+}
+
+is_initrd() {
+    file "$1" | grep -q "gzip compressed data"
+}
+
+fetch_firmware() {
+    local target
+    local fwfile
+    local fwurl
+    local suite
+
+    target="$1"
+    suite="$2"
+    fwfile="firmware.tar.gz"
+    fwurl="http://cdimage.debian.org/cdimage/unofficial/non-free/firmware/$suite/current/$fwfile"
+    wget "$fwurl" -O "$target"
+}
+
+am_root() {
+    [ "$(id -u)" -eq 0 ]
+}
+
+initrd_append_fw() {
+    local initrd="$1"
+    local fwfile="$2"
+    local outfile="$3"
+
+    local initrdtmp="$(mktemp -d)"
+    gunzip < "$initrd" > "$initrdtmp/initrd"
+
+    cd "$initrdtmp"
+
+    tar xfz "$fwfile"
+    mkdir x
+    for file in *deb; do
+	dpkg-deb -x "$file" x
+    done
+
+    mkdir -p x/usr/share/graphics/
+    cp /home/yunohost/yunohost/extras/bandeau.png x/usr/share/graphics/logo_debian.png
+
+    (cd x && find . | cpio -H newc -o) >> initrd
+    cd -
+    gzip -9 < "$initrdtmp/initrd" > "$outfile"
+
+    rm -rf "$initrdtmp"
+}
+
+
+if [ $# != 3 ]; then
+  echo "Usage: add-firmware-to.sh <infile> <outfile> <suite>" >&2
+  exit 1
+fi
+
+file="$1"
+if [ ! -f "$file" ]; then
+  echo "$file not found" >&2
+  exit 2
+fi
+
+outfile="$2"
+if [ -e "$outfile" ]; then
+  echo "$outfile already exists" >&2
+  exit 2
+fi
+
+suite="$3"
+if [ "$suite" != "lenny" ] && [ "$suite" != "squeeze" ]; then
+    echo "Unrecognized suite $suite, trying anyway." >&2
+fi
+
+fwfile="$(mktemp)"
+if ! fetch_firmware "$fwfile" "$suite"; then
+    echo "ERROR: Could not download firmware" >&2
+    exit 1
+fi
+
+if is_iso "$file"; then
+    isotmp="$(mktemp -d)"
+    tmpmnt="$isotmp/tmpmnt"
+    buildtree="$isotmp/buildtree"
+
+    mkdir "$tmpmnt"
+    if am_root; then
+	MOUNT="mount"
+	UMOUNT="umount"
+    elif [ -x /usr/bin/sudo ]; then
+	echo "Attempting to use sudo to gain mount capabilities..."
+	MOUNT="sudo mount"
+	UMOUNT="sudo umount"
+    else
+	echo "WARNING: Couldn't find sudo and not running as root." >&2
+	echo "WARNING: Trying to loopback mount the iso anyway..." >&2
+	MOUNT="mount"
+	UMOUNT="umount"
+    fi
+    $MOUNT "$file" "$tmpmnt" -o loop
+    cp -a "$tmpmnt" "$buildtree"
+    $UMOUNT "$tmpmnt"
+    rmdir "$tmpmnt"
+
+    chmod -R u+w "$buildtree"
+
+    arch=`echo "$file" | cut -d"-" -f3`
+    if [ $arch = "i386" ];
+    then
+                cp -f /home/yunohost/yunohost/isolinux/{adgtk.cfg,adtxt.cfg,gtk.cfg,menu.cfg,stdmenu.cfg,txt.cfg} $buildtree/isolinux/
+    else
+		rm $buildtree/isolinux/{adgtk.cfg,adtxt.cfg,gtk.cfg,menu.cfg,stdmenu.cfg,txt.cfg}
+		cp -f /home/yunohost/yunohost/isolinux/{amdadgtk.cfg,amdadtxt.cfg,amdgtk.cfg,menu.cfg,stdmenu.cfg,amdtxt.cfg} $buildtree/isolinux/
+    fi
+
+    for i in $(find "$buildtree" -name "initrd.gz" -o -name "initrd.img"); do
+	initrd_append_fw "$i" "$fwfile" "$i"
+    done
+    
+    isolinuxpath="$(cd $buildtree && find . -name isolinux.bin | head -1 | cut -b 3-)"
+    mkisofs -r -J -b "$isolinuxpath" -c boot.cat \
+                -no-emul-boot -boot-load-size 4 -boot-info-table \
+                -o "$outfile" "$buildtree"
+    rm -rf "$isotmp"
+fi
+
+if is_initrd "$file"; then
+    initrd_append_fw "$file" "$fwfile" "$outfile"
+fi
+
+echo "Output in $outfile"
+
+rm "$fwfile"
