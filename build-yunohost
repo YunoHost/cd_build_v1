@@ -36,7 +36,7 @@ ln -s yunohost-$DATE-amd64.iso images/yunohost-latest-amd64.iso
 }
 
 
-if [[ "${?:-1}" = 1 ]]
+if [[ "${1:-1}" = 1 ]]
 then
 	build-i386
 	build-amd64
